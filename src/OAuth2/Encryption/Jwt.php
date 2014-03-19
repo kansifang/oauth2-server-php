@@ -64,6 +64,7 @@ class Jwt implements EncryptionInterface
 
     private function verifySignature($signature, $input, $key, $algo = 'HS256')
     {
+        // use constants when possible, for HipHop support
         switch ($algo) {
             case'HS256':
             case'HS384':
@@ -71,13 +72,13 @@ class Jwt implements EncryptionInterface
                 return $this->sign($input, $key, $algo) === $signature;
 
             case 'RS256':
-                return openssl_verify($input, $signature, $key, OPENSSL_ALGO_SHA256) === 1;
+                return openssl_verify($input, $signature, $key, defined('OPENSSL_ALGO_SHA256') ? OPENSSL_ALGO_SHA256 : 'sha256')  === 1;
 
             case 'RS384':
-                return @openssl_verify($input, $signature, $key, OPENSSL_ALGO_SHA384) === 1;
+                return @openssl_verify($input, $signature, $key, defined('OPENSSL_ALGO_SHA384') ? OPENSSL_ALGO_SHA384 : 'sha384') === 1;
 
             case 'RS512':
-                return @openssl_verify($input, $signature, $key, OPENSSL_ALGO_SHA512) === 1;
+                return @openssl_verify($input, $signature, $key, defined('OPENSSL_ALGO_SHA512') ? OPENSSL_ALGO_SHA512 : 'sha512') === 1;
 
             default:
                 throw new \InvalidArgumentException("Unsupported or invalid signing algorithm.");
@@ -97,13 +98,13 @@ class Jwt implements EncryptionInterface
                 return hash_hmac('sha512', $input, $key, true);
 
             case 'RS256':
-                return $this->generateRSASignature($input, $key, OPENSSL_ALGO_SHA256);
+                return $this->generateRSASignature($input, $key, defined('OPENSSL_ALGO_SHA256') ? OPENSSL_ALGO_SHA256 : 'sha256');
 
             case 'RS384':
-                return $this->generateRSASignature($input, $key, OPENSSL_ALGO_SHA384);
+                return $this->generateRSASignature($input, $key, defined('OPENSSL_ALGO_SHA384') ? OPENSSL_ALGO_SHA384 : 'sha384');
 
             case 'RS512':
-                return $this->generateRSASignature($input, $key, OPENSSL_ALGO_SHA512);
+                return $this->generateRSASignature($input, $key, defined('OPENSSL_ALGO_SHA512') ? OPENSSL_ALGO_SHA512 : 'sha512');
 
             default:
                 throw new \Exception("Unsupported or invalid signing algorithm.");
