@@ -16,7 +16,7 @@ services:
   - cassandra
 
 before_script:
-  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+#  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer require predis/predis:dev-master
   - composer require thobbs/phpcassa:dev-master
 
