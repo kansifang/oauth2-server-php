@@ -71,13 +71,13 @@ class Jwt implements EncryptionInterface
                 return $this->sign($input, $key, $algo) === $signature;
 
             case 'RS256':
-                return openssl_verify($input, $signature, $key, 'sha256') === 1;
+                return openssl_verify($input, $signature, $key, OPENSSL_ALGO_SHA256) === 1;
 
             case 'RS384':
-                return @openssl_verify($input, $signature, $key, 'sha384') === 1;
+                return @openssl_verify($input, $signature, $key, OPENSSL_ALGO_SHA384) === 1;
 
             case 'RS512':
-                return @openssl_verify($input, $signature, $key, 'sha512') === 1;
+                return @openssl_verify($input, $signature, $key, OPENSSL_ALGO_SHA512) === 1;
 
             default:
                 throw new \InvalidArgumentException("Unsupported or invalid signing algorithm.");
@@ -97,13 +97,13 @@ class Jwt implements EncryptionInterface
                 return hash_hmac('sha512', $input, $key, true);
 
             case 'RS256':
-                return $this->generateRSASignature($input, $key, 'sha256');
+                return $this->generateRSASignature($input, $key, OPENSSL_ALGO_SHA256);
 
             case 'RS384':
-                return $this->generateRSASignature($input, $key, 'sha384');
+                return $this->generateRSASignature($input, $key, OPENSSL_ALGO_SHA384);
 
             case 'RS512':
-                return $this->generateRSASignature($input, $key, 'sha512');
+                return $this->generateRSASignature($input, $key, OPENSSL_ALGO_SHA512);
 
             default:
                 throw new \Exception("Unsupported or invalid signing algorithm.");
